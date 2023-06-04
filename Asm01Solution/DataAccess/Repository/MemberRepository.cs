@@ -9,11 +9,11 @@ namespace DataAccess.Repository
 {
     public class MemberRepository : IMemberRepository
     {
-        private FStoreContext _context;
+        private readonly PRN221_SalesApplicationContext _context;
 
-        public MemberRepository()
+        public MemberRepository(PRN221_SalesApplicationContext context)
         {
-            _context = FStoreContext.GetInstance();
+            _context = context;
         }
 
         public void AddMember(Member member)

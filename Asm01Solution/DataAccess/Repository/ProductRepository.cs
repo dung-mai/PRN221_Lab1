@@ -9,17 +9,24 @@ namespace DataAccess.Repository
 {
     public class ProductRepository : IProductRepository
     {
-        private FStoreContext _context;
+        private readonly PRN221_SalesApplicationContext _context;
 
-        public ProductRepository() {
-            _context = FStoreContext.GetInstance();
+        public ProductRepository(PRN221_SalesApplicationContext context) {
+            _context = context;
         }
 
         public void AddProduct(Product product)
         {
             if (product != null)
             {
-                _context.Products.Add(product);
+                _context.Products.Add(new Product { 
+                                            CategoryId = product.CategoryId,
+                                            ProductName = product.ProductName,
+                                            OrderDetails = product.OrderDetails,
+                                            UnitPrice = product.UnitPrice,
+                                            UnitsInStock = product.UnitsInStock,
+                                            Weight = product.Weight
+                                     });
                 _context.SaveChanges();
             }
         }

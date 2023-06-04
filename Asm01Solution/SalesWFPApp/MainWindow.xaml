@@ -25,43 +25,35 @@
                     <Label Name="lbTitle" Foreground="Red" FontWeight="DemiBold" FontSize="20" Content="Product Information" />
                     <Label Name="lbProductId" Content="Product Id"/>
                     <TextBox Name="txtProductId" HorizontalAlignment="Stretch" Height="25"
-                        Text="{Binding Path=ProductId, Mode=OneWay}"
-                        DataContext="{Binding ElementName=lvProducts,
-                        Path=SelectedItem}" />
-                    <Label Name="lbCateogryId" Content="Category Id"/>
+                        Text="{Binding CurProduct.ProductId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Name="lbCategoryId" Content="Category Id"/>
                     <TextBox Name="txtCategoryId" HorizontalAlignment="Stretch" Height="25"
-                        Text="{Binding Path=CategoryId, Mode=OneWay}"
-                        DataContext="{Binding ElementName=lvProducts,
-                        Path=SelectedItem}" />
+                        Text="{Binding CurProduct.CategoryId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <Label Name="lbProductName" Content="Product Name" />
                     <TextBox Name="txtProductName" HorizontalAlignment="Stretch" Height="25"
-                        Text="{Binding Path=ProductName, Mode=OneWay}"
-                        DataContext="{Binding ElementName=lvProducts, Path=SelectedItem}" />
+                        Text="{Binding CurProduct.ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <Label Name="lbWeight" Content="Weight" />
                     <TextBox Name="txtWeight" HorizontalAlignment="Stretch" Height="25" 
-                             Text="{Binding Path=Weight, Mode=OneWay}"
-                             DataContext="{Binding ElementName=lvProducts, Path=SelectedItem}" />
-                    <Label Name="lbUnitPrice" Content="Unit Price" />
+                             Text="{Binding CurProduct.Weight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <Label Name="lbUnitPrice" Content="UnitPrice" />
                     <TextBox Name="txtUnitPrice" HorizontalAlignment="Stretch" Height="25"
-                    Text="{Binding Path=UnitPrice,StringFormat={}{0:N3}, Mode=OneWay}"
-                        DataContext="{Binding ElementName=lvProducts, Path=SelectedItem}" />
+                    Text="{Binding CurProduct.UnitPrice,StringFormat={}{0:N3}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <Label Name="lbUnitsInStock" Content="Units In Stock" />
                     <TextBox Name="txtUnitsInStock" HorizontalAlignment="Stretch" Height="25" 
-                             Text="{Binding Path=UnitsInStock, Mode=OneWay}"
-                             DataContext="{Binding ElementName=lvProducts, Path=SelectedItem}" />
+                             Text="{Binding CurProduct.UnitsInStock, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
 
                 <!--StackPanel for Button controls-->
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Button x:Name="btnInsert" Command="{Binding AddProductCommand}" Margin="10" Width="80" Content="Insert"/>
-                    <Button x:Name="btnUpdate" Command="{Binding UpdateProductCommand}" Margin="10" Width="80" Content="Update"/>
-                    <Button x:Name="btnDelete" Command="{Binding DeleteProductCommand}" Margin="10" Width="80" Content="Delete"/>
+                    <Button x:Name="btnInsert" Command="{Binding AddProductCommand}" CommandParameter="{Binding CurProduct}" Margin="10" Width="80" Content="Insert"/>
+                    <Button x:Name="btnUpdate" Command="{Binding UpdateProductCommand}" CommandParameter="{Binding CurProduct}" Margin="10" Width="80" Content="Update"/>
+                    <Button x:Name="btnDelete" Command="{Binding DeleteProductCommand}" CommandParameter="{Binding CurProduct}" Margin="10" Width="80" Content="Delete"/>
                 </StackPanel>
 
                 <!-- ListView control-->
                 <ListView Grid.Row="2" Name="lvProducts" Width="Auto" Height="Auto" 
                           ItemsSource="{Binding Products, Mode=TwoWay, UpdateSourceTrigger=Explicit}" 
-                          SelectedItem="{Binding CurProduct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                          SelectedItem="{Binding CurProduct, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Product ID" Width="100" DisplayMemberBinding="{Binding ProductId}"/>

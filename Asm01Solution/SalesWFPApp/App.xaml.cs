@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using SalesWFPApp.ViewModel;
 using DataAccess;
+using DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace SalesWFPApp
 {
@@ -33,6 +36,9 @@ namespace SalesWFPApp
 
         private void ConfigurationServices(ServiceCollection services)
         {
+            // Register the DbContext as a singleton service
+            services.AddDbContext<PRN221_SalesApplicationContext>(ServiceLifetime.Singleton);
+
             // Register AutoMapper
             services.AddAutoMapper(typeof(AutoMapperProfile)); //register with IoC & singleton service
 

@@ -116,23 +116,23 @@ namespace SalesWFPApp.ViewModel
             AddProductCommand = new RelayCommand<ProductObject>(
                 p =>
                 {
-                    _productService.AddProduct(CurProduct);
-                    Products.Add(CurProduct);
+                    _productService.AddProduct(p);
+                    Products.Add(p);
                 },
-                p => p != null);
+                p => true);
             UpdateProductCommand = new RelayCommand<ProductObject>(
                 p =>
                 {
                     _productService.UpdateProduct(CurProduct);
                     Products.Add(CurProduct);
                 },
-                p => p != null);
-            AddProductCommand = new RelayCommand<ProductObject>(
+                p => true);
+            DeleteProductCommand = new RelayCommand<ProductObject>(
                 p =>
                 {
                     _productService.DeleteProduct(CurProduct);
                 },
-                p => p != null);
+                p => true);
         }
 
         private void LoadAllProducts()

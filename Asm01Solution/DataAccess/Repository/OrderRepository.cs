@@ -10,11 +10,11 @@ namespace DataAccess.Repository
 {
     public class OrderRepository : IOrderRepository
     {
-        private FStoreContext _context;
+        private readonly PRN221_SalesApplicationContext _context;
 
-        public OrderRepository()
+        public OrderRepository(PRN221_SalesApplicationContext context)
         {
-            _context = FStoreContext.GetInstance();
+            _context = context;
         }
 
         public void AddOrder(Order order)

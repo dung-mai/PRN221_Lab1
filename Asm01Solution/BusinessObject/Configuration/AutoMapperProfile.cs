@@ -14,7 +14,7 @@ namespace BusinessObject.Configuration
     {
         public AutoMapperProfile() 
         {
-            CreateMap<Product, ProductObject>();
+            CreateMap<Product, ProductObject>().ReverseMap();
             CreateMap<Order, OrderObject>().ReverseMap();
             CreateMap<DataAccess.Models.Member, MemberObject>().ReverseMap();
             CreateMap<OrderDetail, OrderDetailObject>().ReverseMap();
