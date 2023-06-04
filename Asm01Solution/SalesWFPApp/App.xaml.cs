@@ -12,7 +12,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using SalesWFPApp.ViewModel;
-using DataAccess;
 using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -43,17 +42,12 @@ namespace SalesWFPApp
             services.AddAutoMapper(typeof(AutoMapperProfile)); //register with IoC & singleton service
 
             // Register other services (Interface..) here
-            services.AddSingleton<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+            services.AddScoped<IMemberRepository, MemberRepository>();
 
-            services.AddSingleton<IOrderRepository, OrderRepository>();
-            services.AddSingleton<IOrderDetailRepository, OrderDetailRepository>();
-            services.AddSingleton<IProductRepository, ProductRepository>();
-            services.AddSingleton<IProductService, ProductService>();
-            services.AddSingleton<IProductService, ProductService>();
-            services.AddSingleton<IProductService, ProductService>();
-            services.AddSingleton<IProductService, ProductService>();
-
-
+            services.AddScoped<IProductService, ProductService>();
 
             services.AddSingleton<ProductViewModel>();
 

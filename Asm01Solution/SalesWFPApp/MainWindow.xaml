@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SalesWFPApp" 
         xmlns:vm="clr-namespace:SalesWFPApp.ViewModel"
         mc:Ignorable="d"
-        Title="Product Management" Height="620" Width="800">
+        Title="Product Management" Height="640" Width="800">
     <!--<window.datacontext>
         <vm:productviewmodel/>
     </window.datacontext>-->
@@ -25,22 +25,44 @@
                     <Label Name="lbTitle" Foreground="Red" FontWeight="DemiBold" FontSize="20" Content="Product Information" />
                     <Label Name="lbProductId" Content="Product Id"/>
                     <TextBox Name="txtProductId" HorizontalAlignment="Stretch" Height="25"
-                        Text="{Binding CurProduct.ProductId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        Text="{Binding ProductId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, 
+                                Converter={StaticResource NullToEmptyStringConverter}, 
+                                    ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"
+                        Validation.ErrorTemplate="{StaticResource ErrorTemplate}" IsReadOnly="True"/>
+                    
                     <Label Name="lbCategoryId" Content="Category Id"/>
                     <TextBox Name="txtCategoryId" HorizontalAlignment="Stretch" Height="25"
-                        Text="{Binding CurProduct.CategoryId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        Text="{Binding CategoryId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
+                                Converter={StaticResource NullToEmptyStringConverter}, 
+                                    ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"
+                        Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
+                    
                     <Label Name="lbProductName" Content="Product Name" />
                     <TextBox Name="txtProductName" HorizontalAlignment="Stretch" Height="25"
-                        Text="{Binding CurProduct.ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, 
+                                    ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"
+                        Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
+                    
                     <Label Name="lbWeight" Content="Weight" />
                     <TextBox Name="txtWeight" HorizontalAlignment="Stretch" Height="25" 
-                             Text="{Binding CurProduct.Weight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                             Text="{Binding Weight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
+                                    Converter={StaticResource NullToEmptyStringConverter}, 
+                                    ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"
+                            Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
+                    
                     <Label Name="lbUnitPrice" Content="UnitPrice" />
                     <TextBox Name="txtUnitPrice" HorizontalAlignment="Stretch" Height="25"
-                    Text="{Binding CurProduct.UnitPrice,StringFormat={}{0:N3}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    Text="{Binding UnitPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
+                                Converter={StaticResource NullToEmptyStringConverter}, 
+                                    ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"
+                            Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
+                    
                     <Label Name="lbUnitsInStock" Content="Units In Stock" />
                     <TextBox Name="txtUnitsInStock" HorizontalAlignment="Stretch" Height="25" 
-                             Text="{Binding CurProduct.UnitsInStock, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                             Text="{Binding UnitsInStock, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
+                                    Converter={StaticResource NullToEmptyStringConverter}, 
+                                    ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"
+                            Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
                 </StackPanel>
 
                 <!--StackPanel for Button controls-->
@@ -48,12 +70,13 @@
                     <Button x:Name="btnInsert" Command="{Binding AddProductCommand}" CommandParameter="{Binding CurProduct}" Margin="10" Width="80" Content="Insert"/>
                     <Button x:Name="btnUpdate" Command="{Binding UpdateProductCommand}" CommandParameter="{Binding CurProduct}" Margin="10" Width="80" Content="Update"/>
                     <Button x:Name="btnDelete" Command="{Binding DeleteProductCommand}" CommandParameter="{Binding CurProduct}" Margin="10" Width="80" Content="Delete"/>
+                    <Button x:Name="btnReset" Command="{Binding ResetCommand}" Margin="10" Width="80" Content="Reset"/>
                 </StackPanel>
 
                 <!-- ListView control-->
                 <ListView Grid.Row="2" Name="lvProducts" Width="Auto" Height="Auto" 
                           ItemsSource="{Binding Products, Mode=TwoWay, UpdateSourceTrigger=Explicit}" 
-                          SelectedItem="{Binding CurProduct, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}">
+                          SelectedItem="{Binding CurProduct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Product ID" Width="100" DisplayMemberBinding="{Binding ProductId}"/>

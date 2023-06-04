@@ -29,7 +29,6 @@ namespace BusinessLayer.Services
             //2. # null, object không tồn tại (tạo tài khoản....)
 
 
-
             //map
             var product = _mapper.Map<Product>(productBO);
             _productRepository.AddProduct(product);
@@ -37,7 +36,8 @@ namespace BusinessLayer.Services
 
         public void DeleteProduct(ProductObject productBO)
         {
-            throw new NotImplementedException();
+            var product = _mapper.Map<Product>(productBO);
+            _productRepository.DeleteProduct(product);
         }
 
         public List<ProductObject> GetAllProducts()
@@ -52,7 +52,8 @@ namespace BusinessLayer.Services
 
         public void UpdateProduct(ProductObject productBO)
         {
-            throw new NotImplementedException();
+            var product = _mapper.Map<Product>(productBO);
+            _productRepository.UpdateProduct(product);
         }
     }
 }

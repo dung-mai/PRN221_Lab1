@@ -22,7 +22,6 @@ namespace DataAccess.Repository
                 _context.Products.Add(new Product { 
                                             CategoryId = product.CategoryId,
                                             ProductName = product.ProductName,
-                                            OrderDetails = product.OrderDetails,
                                             UnitPrice = product.UnitPrice,
                                             UnitsInStock = product.UnitsInStock,
                                             Weight = product.Weight
@@ -33,10 +32,18 @@ namespace DataAccess.Repository
 
         public void DeleteProduct(Product product)
         {
-            if (product != null)
+            try
             {
-                _context.Products.Remove(product);
-                _context.SaveChanges();
+                if (product != null)
+                {
+                    Product? p = GetProductById(product.ProductId);
+                    _context.Products.Remove(p);
+                    _context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 
@@ -52,10 +59,24 @@ namespace DataAccess.Repository
 
         public void UpdateProduct(Product product)
         {
-            if (product != null)
+            try
             {
-                _context.Products.Update(product);
-                _context.SaveChanges();
+                if (product != null)
+                {
+                    Product? p = GetProductById(product.ProductId);
+                    if(p != null)
+                    {
+                        p.ProductName = product.ProductName;
+                        p.UnitPrice = product.UnitPrice;
+                        p.CategoryId = product.CategoryId;
+                        p.UnitPrice = product.UnitPrice;
+                        p.UnitsInStock = product.UnitsInStock;
+                        _context.SaveChanges();
+                    }
+                }
+            } catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
     }
