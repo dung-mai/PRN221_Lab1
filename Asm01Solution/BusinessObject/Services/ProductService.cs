@@ -13,8 +13,8 @@ namespace BusinessLayer.Services
 {
     public class ProductService : IProductService
     {
-        private IProductRepository _productRepository;
-        private IMapper _mapper;
+        private readonly IProductRepository _productRepository;
+        private readonly IMapper _mapper;
 
         public ProductService(IProductRepository productRepository, IMapper mapper)
         {
@@ -47,7 +47,7 @@ namespace BusinessLayer.Services
 
         public ProductObject? GetProductById(int id)
         {
-            throw new NotImplementedException();
+            return _mapper.Map<ProductObject>(_productRepository.GetProductById(id));
         }
 
         public void UpdateProduct(ProductObject productBO)

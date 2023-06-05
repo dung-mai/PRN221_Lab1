@@ -21,17 +21,32 @@ namespace DataAccess.Repository
         {
             if (order != null)
             {
-                _context.Orders.Add(order);
+                _context.Orders.Add(new Order
+                {
+                    Freight = order.Freight,
+                    MemberId = order.MemberId,
+                    RequiredDate = order.RequiredDate,
+                    ShippedDate = order.ShippedDate,
+                    OrderDate = order.OrderDate
+                });
                 _context.SaveChanges();
             }
         }
 
         public void DeleteOrder(Order order)
         {
-            if (order != null)
+            try
             {
-                _context.Orders.Remove(order);
-                _context.SaveChanges();
+                if (order != null)
+                {
+                    Order? o = GetOrderById(order.OrderId);
+                    _context.Orders.Remove(o);
+                    _context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 
@@ -47,10 +62,25 @@ namespace DataAccess.Repository
 
         public void UpdateOrder(Order order)
         {
-            if (order != null)
+            try
             {
-                _context.Orders.Update(order);
-                _context.SaveChanges();
+                if (order != null)
+                {
+                    Order? o = GetOrderById(order.OrderId);
+                    if (o != null)
+                    {
+                        o.Freight = order.Freight;
+                        o.MemberId = order.MemberId;
+                        o.RequiredDate = order.RequiredDate;
+                        o.ShippedDate = order.ShippedDate;
+                        o.OrderDate = order.OrderDate;
+                        _context.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
     }

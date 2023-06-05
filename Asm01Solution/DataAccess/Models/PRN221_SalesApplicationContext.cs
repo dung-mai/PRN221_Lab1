@@ -43,7 +43,9 @@ namespace DataAccess.Models
                     .HasMaxLength(15)
                     .IsUnicode(false);
 
-                entity.Property(e => e.CompanyName).HasMaxLength(40);
+                entity.Property(e => e.CompanyName)
+                    .HasMaxLength(40)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Country)
                     .HasMaxLength(15)

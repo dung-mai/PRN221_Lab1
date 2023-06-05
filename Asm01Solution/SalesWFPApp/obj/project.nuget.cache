@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "Frzy+KZjxx5g6XIrHkJWs/LhS7rCiEuPLszRHuTAIbmkDannpnhgb5FHd5eW9U8dRy6wrIej1nkRU5PlAk82wQ==",
+  "dgSpecHash": "R2w4jwsJpNWAHS+PFH6TOnJrDzGpZPf5XsgI/HeHfLSkTuFjoHcrBpvq6MJdvFhTig24S/emEOXWHoaIOprcCQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Admin\\Documents\\GitHub\\PRN221\\Asm01Solution\\SalesWFPApp\\SalesWFPApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\communitytoolkit.mvvm\\8.2.0\\communitytoolkit.mvvm.8.2.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\extended.wpf.toolkit\\4.5.0\\extended.wpf.toolkit.4.5.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.data.sqlclient\\2.1.4\\microsoft.data.sqlclient.2.1.4.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\2.1.1\\microsoft.data.sqlclient.sni.runtime.2.1.1.nupkg.sha512",

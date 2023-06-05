@@ -20,18 +20,33 @@ namespace DataAccess.Repository
         {
             if (orderDetail != null)
             {
-                _context.OrderDetails.Add(orderDetail);
+                _context.OrderDetails.Add(new OrderDetail
+                {
+                    OrderId = orderDetail.OrderId,
+                    Discount = orderDetail.Discount,
+                    ProductId = orderDetail.ProductId,
+                    Quantity = orderDetail.Quantity,
+                    UnitPrice = orderDetail.UnitPrice,
+                });
                 _context.SaveChanges();
             }
         }
 
         public void DeleteOrderDetail(OrderDetail orderDetail)
         {
-            if (orderDetail != null)
-            {
-                _context.OrderDetails.Add(orderDetail);
-                _context.SaveChanges();
-            }
+            //try
+            //{
+            //    if (orderDetail != null)
+            //    {
+            //        OrderDetail? p = GetOrderDetailById(orderDetail.OrderDetailId);
+            //        _context.OrderDetails.Remove(p);
+            //        _context.SaveChanges();
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new Exception(ex.Message);
+            //}
         }
 
         public List<OrderDetail> GetOrderDetailByOrderId(int id)
@@ -41,11 +56,26 @@ namespace DataAccess.Repository
 
         public void UpdateOrderDetail(OrderDetail orderDetail)
         {
-            if (orderDetail != null)
-            {
-                _context.OrderDetails.Add(orderDetail);
-                _context.SaveChanges();
-            }
+            //try
+            //{
+            //    if (orderDetail != null)
+            //    {
+            //        OrderDetail? od = GetOrderDetailById(orderDetail.OrderDetailId);
+            //        if (od != null)
+            //        {
+            //            od.OrderId = orderDetail.OrderId;
+            //            od.Discount = orderDetail.Discount;
+            //            od.ProductId = orderDetail.ProductId;
+            //            od.Quantity = orderDetail.Quantity;
+            //            od.UnitPrice = orderDetail.UnitPrice;
+            //            _context.SaveChanges();
+            //        }
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new Exception(ex.Message);
+            //}
         }
     }
 }

@@ -30,6 +30,17 @@ namespace DataAccess.Repository
             }
         }
 
+
+        public List<Product> GetAllProducts()
+        {
+            return _context.Products.ToList();
+        }
+
+        public Product? GetProductById(int id)
+        {
+            return _context.Products.FirstOrDefault(p => p.ProductId == id);
+        }
+
         public void DeleteProduct(Product product)
         {
             try
@@ -45,16 +56,6 @@ namespace DataAccess.Repository
             {
                 throw new Exception(ex.Message);
             }
-        }
-
-        public List<Product> GetAllProducts()
-        {
-            return _context.Products.ToList();
-        }
-
-        public Product? GetProductById(int id)
-        {
-            return _context.Products.FirstOrDefault(p => p.ProductId == id);
         }
 
         public void UpdateProduct(Product product)

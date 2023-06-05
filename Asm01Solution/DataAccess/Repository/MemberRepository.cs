@@ -1,6 +1,7 @@
 ﻿using DataAccess.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,26 +21,59 @@ namespace DataAccess.Repository
         {
             if (member != null)
             {
-                _context.Members.Add(member);
+                _context.Members.Add(new Member
+                {
+                    City = member.City,
+                    Country = member.Country,
+                    CompanyName = member.CompanyName,
+                    Email = member.Email,
+                    Password = member.Password
+                });
                 _context.SaveChanges();
             }
         }
 
         public void UpdateMember(Member member)
         {
-            if (member != null)
+            try
             {
-                _context.Members.Update(member);
-                _context.SaveChanges();
+                if (member != null)
+                {
+                    Member? m = GetMemberById(member.MemberId);
+                    if (m != null)
+                    {
+                        m.City = member.City;
+                        m.Country = member.Country;
+                        m.CompanyName = member.CompanyName;
+                        m.Email = member.Email;
+                        m.Password = member.Password;
+                        _context.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 
         public void DeleteMember(Member member)
         {
-            if (member != null)
+            try
             {
-                _context.Members.Remove(member);
-                _context.SaveChanges();
+                if (member != null)
+                {
+                    Member? m = GetMemberById(member.MemberId);
+                    if(m != null)
+                    {
+                        _context.Members.Remove(m);
+                    }
+                    _context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 

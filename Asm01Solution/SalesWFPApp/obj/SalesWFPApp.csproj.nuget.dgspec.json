@@ -148,7 +148,7 @@
       "version": "1.0.0",
       "restore": {
         "projectUniqueName": "C:\\Users\\Admin\\Documents\\GitHub\\PRN221\\Asm01Solution\\SalesWFPApp\\SalesWFPApp.csproj",
-        "projectName": "SalesWFPApp",
+        "projectName": "SalesWFPAppAssembly",
         "projectPath": "C:\\Users\\Admin\\Documents\\GitHub\\PRN221\\Asm01Solution\\SalesWFPApp\\SalesWFPApp.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\Admin\\Documents\\GitHub\\PRN221\\Asm01Solution\\SalesWFPApp\\obj\\",
@@ -190,6 +190,10 @@
             "CommunityToolkit.Mvvm": {
               "target": "Package",
               "version": "[8.2.0, )"
+            },
+            "Extended.Wpf.Toolkit": {
+              "target": "Package",
+              "version": "[4.5.0, )"
             }
           },
           "imports": [

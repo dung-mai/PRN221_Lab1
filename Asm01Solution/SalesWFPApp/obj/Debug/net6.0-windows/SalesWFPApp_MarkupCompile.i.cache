@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\Users\Admin\Documents\GitHub\PRN221\Asm01Solution\SalesWFPApp\App.xaml
-11407045341
+4-1435230248
 
-7486538237
+11-99949009
 225-1561537780
-MainWindow.xaml;
+MainWindow.xaml;MemberWindow.xaml;View\LoginWindow.xaml;View\OrderManagementWindow.xaml;
 
-True
+False
 

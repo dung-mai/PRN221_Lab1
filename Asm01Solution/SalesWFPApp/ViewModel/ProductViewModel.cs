@@ -20,7 +20,7 @@ namespace SalesWFPApp.ViewModel
 {
     public class ProductViewModel :INotifyPropertyChanged, IDataErrorInfo
     {
-        private IProductService _productService;
+        private readonly IProductService _productService;
 
         private int _productId;
         public int ProductId
@@ -163,7 +163,8 @@ namespace SalesWFPApp.ViewModel
                     //update in db
                     _productService.UpdateProduct(CurProduct);
 
-                    //update for Products List in Lí
+                    //update for Products List in L
+                    LoadAllProducts();
                     OnPropertyChanged(nameof(Products));
                     IsCommandExecuted = true;
                 },

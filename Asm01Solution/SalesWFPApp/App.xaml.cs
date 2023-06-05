@@ -15,6 +15,7 @@ using SalesWFPApp.ViewModel;
 using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using SalesWFPApp.View;
 
 namespace SalesWFPApp
 {
@@ -23,7 +24,7 @@ namespace SalesWFPApp
     /// </summary>
     public partial class App : Application
     {
-        private ServiceProvider _serviceProvider;
+        private readonly ServiceProvider _serviceProvider;
         public ServiceProvider ServiceProvider { get { return _serviceProvider; } }
 
         public App()
@@ -48,9 +49,28 @@ namespace SalesWFPApp
             services.AddScoped<IMemberRepository, MemberRepository>();
 
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IMemberService, MemberService>();
+            services.AddScoped<IOrderDetailService, OrderDetailService>();
+            services.AddScoped<IOrderService, OrderService>();
 
             services.AddSingleton<ProductViewModel>();
+            services.AddSingleton<MemberViewModel>();
+            services.AddSingleton<OrderViewModel>();
 
         }
+
+        //private void OnStartUp(Object sender, StartupEventArgs e)
+        //{
+            
+        //}
+
+        //protected override void OnStartup(StartupEventArgs e)
+        //{
+
+        //    // Create and show the main window
+        //    //var memberWindow = _serviceProvider.GetService<MemberWindow>();
+        //    MemberWindow memberWindow = new MemberWindow();
+        //    memberWindow.Show();
+        //}
     }
 }
