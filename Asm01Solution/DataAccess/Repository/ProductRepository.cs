@@ -17,16 +17,24 @@ namespace DataAccess.Repository
 
         public void AddProduct(Product product)
         {
-            if (product != null)
+            try
             {
-                _context.Products.Add(new Product { 
-                                            CategoryId = product.CategoryId,
-                                            ProductName = product.ProductName,
-                                            UnitPrice = product.UnitPrice,
-                                            UnitsInStock = product.UnitsInStock,
-                                            Weight = product.Weight
-                                     });
-                _context.SaveChanges();
+                if (product != null)
+                {
+                    _context.Products.Add(new Product
+                    {
+                        CategoryId = product.CategoryId,
+                        ProductName = product.ProductName,
+                        UnitPrice = product.UnitPrice,
+                        UnitsInStock = product.UnitsInStock,
+                        Weight = product.Weight
+                    });
+                    _context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 
@@ -48,7 +56,10 @@ namespace DataAccess.Repository
                 if (product != null)
                 {
                     Product? p = GetProductById(product.ProductId);
-                    _context.Products.Remove(p);
+                    if(p != null)
+                    {
+                        _context.Products.Remove(p);
+                    }
                     _context.SaveChanges();
                 }
             }

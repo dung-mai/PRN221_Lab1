@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.BusinessObject;
+using BusinessLayer.Validator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,6 @@ namespace BusinessLayer.Services
         public void DeleteMember(MemberObject memberBO);
         public MemberObject? GetMemberById(int id);
         public List<MemberObject> GetAllMembers();
+        public ValidationObject Login(string username, string password);
     }
 }

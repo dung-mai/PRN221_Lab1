@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SalesWFPApp.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +24,8 @@ namespace SalesWFPApp.View
         public LoginWindow()
         {
             InitializeComponent();
+            var loginViewModel = ((App)Application.Current).ServiceProvider.GetRequiredService<LoginViewModel>();
+            DataContext = loginViewModel;
         }
     }
 }

@@ -2,6 +2,8 @@
 using BusinessLayer.Services;
 using CommunityToolkit.Mvvm.Input;
 using DataAccess.Models;
+using SalesWFPApp.HelperObject;
+using SalesWFPApp.Validator;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,15 +15,18 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml.Linq;
 
 namespace SalesWFPApp.ViewModel
 {
-    public class ProductViewModel :INotifyPropertyChanged, IDataErrorInfo
+    public class ProductViewModel : BaseViewModel
     {
         private readonly IProductService _productService;
+        private ProductViewModelValidator validator;
 
+        #region for defined properties of ProductViewModel
         private int _productId;
         public int ProductId
         {
@@ -39,6 +44,7 @@ namespace SalesWFPApp.ViewModel
             set
             {
                 _categoryId = value;
+                ValidateProperty(nameof(CategoryId), value);
                 OnPropertyChanged(nameof(CategoryId));
             }
         }
@@ -49,6 +55,7 @@ namespace SalesWFPApp.ViewModel
             set
             {
                 _productName = value;
+                ValidateProperty(nameof(ProductName), value);
                 OnPropertyChanged(nameof(ProductName));
             }
         }
@@ -59,6 +66,7 @@ namespace SalesWFPApp.ViewModel
             set
             {
                 _weight = value;
+                ValidateProperty(nameof(Weight), value);
                 OnPropertyChanged(nameof(Weight));
             }
         }
@@ -69,6 +77,7 @@ namespace SalesWFPApp.ViewModel
             set
             {
                 _unitPrice = value;
+                ValidateProperty(nameof(UnitPrice), value);
                 OnPropertyChanged(nameof(UnitPrice));
             }
         }
@@ -79,6 +88,7 @@ namespace SalesWFPApp.ViewModel
             set
             {
                 _unitsInStock = value;
+                ValidateProperty(nameof(UnitsInStock), value);
                 OnPropertyChanged(nameof(UnitsInStock));
             }
         }
@@ -102,16 +112,6 @@ namespace SalesWFPApp.ViewModel
                 OnPropertyChanged(nameof(CurProduct));
             }
         }
-        private bool isCommandExecuted;
-        public bool IsCommandExecuted
-        {
-            get => isCommandExecuted;
-            set
-            {
-                isCommandExecuted = value;
-                OnPropertyChanged(nameof(IsCommandExecuted));
-            }
-        }
 
         public ObservableCollection<ProductObject> Products { get; set; }
 
@@ -119,75 +119,98 @@ namespace SalesWFPApp.ViewModel
         public RelayCommand<ProductObject> AddProductCommand { get; set; }
         public RelayCommand<ProductObject> UpdateProductCommand { get; set; }
         public RelayCommand ResetCommand { get; set; }
+        #endregion
 
         public ProductViewModel(IProductService productService)
         {
             _productService = productService;
+            validator = new ProductViewModelValidator();
             LoadAllProducts();
             DefineRelayCommand();
-            IsCommandExecuted = false;
         }
-
 
         private void DefineRelayCommand()
         {
-            AddProductCommand = new RelayCommand<ProductObject>(
-                p =>
-                {
-                    ///logic
-                    ProductObject product = new ProductObject
-                    {
-                        ProductId = _productId,
-                        CategoryId = _categoryId,
-                        ProductName = _productName,
-                        UnitPrice = _unitPrice,
-                        UnitsInStock = _unitsInStock,
-                        Weight = _weight
-                    };
-                    _productService.AddProduct(product);
-                    //Products.Add(product);
-                    LoadAllProducts();
-                    OnPropertyChanged(nameof(Products));
-                    IsCommandExecuted = true;
-                },
-                p => true);
-            UpdateProductCommand = new RelayCommand<ProductObject>(
-                p =>
-                {
-                    CurProduct.CategoryId = CategoryId;
-                    CurProduct.ProductName = ProductName;
-                    CurProduct.UnitPrice = UnitPrice;
-                    CurProduct.Weight = Weight;
-                    CurProduct.UnitsInStock = UnitsInStock;
+            AddProductCommand = new RelayCommand<ProductObject>(AddNewProduct,p => true);
+            UpdateProductCommand = new RelayCommand<ProductObject>(UpdateProduct, p => true);
+            DeleteProductCommand = new RelayCommand<ProductObject>(DeleteProduct, p => true);
+            ResetCommand = new RelayCommand(ResetTextbox);
+        }
 
-                    //update in db
-                    _productService.UpdateProduct(CurProduct);
-
-                    //update for Products List in L
-                    LoadAllProducts();
-                    OnPropertyChanged(nameof(Products));
-                    IsCommandExecuted = true;
-                },
-                p => true);
-            DeleteProductCommand = new RelayCommand<ProductObject>(
-                p =>
-                {
-                    _productService.DeleteProduct(CurProduct);
-                    Products.Remove(CurProduct);
-                },
-                p => true);
-
-            ResetCommand = new RelayCommand(() =>
+        private async void AddNewProduct(ProductObject? p)
+        {
+            var result = await validator.ValidateAsync(this);
+            if (result.IsValid)
             {
-                ProductId = 0;
-                CategoryId = 0;
-                ProductName = "";
-                UnitPrice = 0;
-                UnitsInStock = 0;
-                Weight = "";
+                ///update in DB
+                ProductObject product = new ProductObject
+                {
+                    ProductId = _productId,
+                    CategoryId = _categoryId,
+                    ProductName = _productName,
+                    UnitPrice = _unitPrice,
+                    UnitsInStock = _unitsInStock,
+                    Weight = _weight
+                };
+                _productService.AddProduct(product);
+                NotificationObject.DisplayMessage("Added successfully!");
 
-                IsCommandExecuted = false;
-            });
+                //update in UI
+                LoadAllProducts();
+                OnPropertyChanged(nameof(Products));
+                ResetTextbox();
+            } else
+            {
+                NotificationObject.DisplayMessage("Please enter again!");
+            }
+        }
+
+        private async void UpdateProduct(ProductObject? p)
+        {
+            var result = await validator.ValidateAsync(this);
+            if (result.IsValid)
+            {
+                CurProduct.CategoryId = CategoryId;
+                CurProduct.ProductName = ProductName;
+                CurProduct.UnitPrice = UnitPrice;
+                CurProduct.Weight = Weight;
+                CurProduct.UnitsInStock = UnitsInStock;
+
+                //update in db
+                _productService.UpdateProduct(CurProduct);
+                NotificationObject.DisplayMessage("Update successfully!");
+
+                //update in UI
+                LoadAllProducts();
+                OnPropertyChanged(nameof(Products));
+                ResetTextbox();
+            }
+            else
+            {
+                NotificationObject.DisplayMessage("Please enter again!");
+            }
+        }
+
+        private void DeleteProduct(ProductObject? p)
+        {
+            _productService.DeleteProduct(CurProduct);
+            NotificationObject.DisplayMessage("Delete successfully!");
+
+            //Update in UI
+            Products.Remove(CurProduct);
+            ResetTextbox();
+        }
+
+        private void ResetTextbox()
+        {
+            SkipValidation(true);
+            ProductId = 0;
+            CategoryId = 0;
+            ProductName = "";
+            UnitPrice = 0;
+            UnitsInStock = 0;
+            Weight = "";
+            SkipValidation(false);
         }
 
         private void LoadAllProducts()
@@ -195,57 +218,19 @@ namespace SalesWFPApp.ViewModel
             Products = new ObservableCollection<ProductObject>(_productService.GetAllProducts());
         }
 
-
-        public string this[string columnName]
+        private async void ValidateProperty(string propertyName, object value)
         {
-            get
+            var result = await validator.ValidateAsync(this);
+            var errors = result.Errors.Where(e => e.PropertyName == propertyName).ToList();
+            if (errors.Any())
             {
-                string error = null;
-                switch (columnName)
-                {
-                    case nameof(CategoryId):
-                        if (string.IsNullOrEmpty(CategoryId.ToString()))
-                        {
-                            error = "CategoryId is required.";
-                        }
-                        break;
-                    case nameof(UnitPrice):
-                        if (UnitPrice <= 0)
-                        {
-                            error = "Price must be greater than 0.";
-                        }
-                        break;
-                    case nameof(Weight):
-                        if (string.IsNullOrEmpty(Weight))
-                        {
-                            error = "Weight is required.";
-                        }
-                        break;
-                    case nameof(UnitsInStock):
-                        if (string.IsNullOrEmpty(UnitsInStock.ToString()))
-                        {
-                            error = "UnitsInStock is required.";
-                        }
-                        break;
-                    case nameof(ProductName):
-                        if (string.IsNullOrEmpty(ProductName))
-                        {
-                            error = "ProductName is required.";
-                        }
-                        break;
-                }
-                return error;
+                var errorMsg = string.Join(Environment.NewLine, errors.Select(e => e.ErrorMessage));
+                SetError(propertyName, errorMsg);
             }
-        }
-
-        public string Error => null;
-        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            else
+            {
+                ClearError(propertyName);
+            }
         }
     }
 }

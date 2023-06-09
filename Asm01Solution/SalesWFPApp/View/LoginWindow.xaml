@@ -4,27 +4,79 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SalesWFPApp.View"
+        xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:f="clr-namespace:SalesWFPApp"
+        xmlns:i="System.Windows.Interactivity "
         mc:Ignorable="d"
-        Title="LoginWindow" Height="200" Width="400">
+        Title="LoginWindow" Height="450" Width="800">
     <Grid>
-        <Label Content="Email" HorizontalAlignment="Left" Margin="30,32,0,0" VerticalAlignment="Top"/>
-        <TextBox Name="txtEmail" HorizontalAlignment="Left" 
-                 Margin="112,34,0,0" TextWrapping="Wrap" 
-                 VerticalAlignment="Top" Width="183" Height="22"
-                 TabIndex="1" VerticalContentAlignment="Center"/>
-        <Label Content="Password" HorizontalAlignment="Left" 
-               Margin="30,74,0,0" VerticalAlignment="Top"/>
-        <PasswordBox Name="txtPassword" HorizontalAlignment="Left" 
-                     Margin="112,76,0,0" VerticalAlignment="Top" 
-                     Width="183" Height="22" TabIndex="2"
-                     VerticalContentAlignment="Center"/>
-        <Button x:Name="btnLogin" Content="Login" 
-                HorizontalAlignment="Left" Margin="112,113,0,0" 
-                VerticalAlignment="Top" Width="72" Height="25" 
-                IsDefault="True" TabIndex="3"/>
-        <Button x:Name="btnCancel"
-                Content="Cancel" HorizontalAlignment="Left" 
-                Margin="223,113,0,0" VerticalAlignment="Top" 
-                Width="72" Height="25" IsCancel="True" TabIndex="4"/>
+        <Grid.Background>
+            <ImageBrush ImageSource="/Images/background1.jpg" Opacity="0.5"/>
+        </Grid.Background>
+        <Border Width="300" VerticalAlignment="Center" HorizontalAlignment="Center" BorderBrush="#E2E9E9"
+                BorderThickness="2" CornerRadius="10" Padding="30" Background="White">
+            <StackPanel>
+                <TextBlock Foreground="#5a5a5a" FontWeight="SemiBold"
+                    FontSize="20" Text="Login"/>
+                <Grid>
+                    <TextBlock Text="Enter Email" HorizontalAlignment="Left" Margin="37,39,0,10" Foreground="#bdbdbd" 
+                           FontWeight="SemiBold" Panel.ZIndex="1" IsHitTestVisible="False" Name="labelEmail">
+                        <TextBlock.Visibility>
+                            <MultiBinding Converter="{StaticResource MultipleToVis}">
+                                <Binding Path="(f:TextBoxAttachedProperties.IsFocused)" UpdateSourceTrigger="PropertyChanged" RelativeSource="{RelativeSource Self}"/>
+                                <!--<Binding Path="IsFocused" Mode="OneWay" RelativeSource="{RelativeSource AncestorType=TextBox}"/>-->
+                                <Binding Path="Email" Mode="OneWay"/>
+                            </MultiBinding>
+                        </TextBlock.Visibility>
+                    </TextBlock>
+                    <TextBox Name="txtEmail" HorizontalAlignment="Center" Background="Transparent"
+                             Padding="32 0 0 0"
+                     Margin="0,32,0,0" TextWrapping="Wrap" Text="{Binding Email, Mode=TwoWay}"
+                     VerticalAlignment="Top" Width="220" Height="33" 
+                             f:TextBoxAttachedProperties.IsFocused="{Binding Path=IsFocused, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     TabIndex="1" VerticalContentAlignment="Center">
+                    </TextBox>
+                    <Icon:PackIconMaterial Kind="EmailVariant" Width="14" Foreground="#c7c7c7" Margin="14,40,0,0"/>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="73*"/>
+                        <ColumnDefinition Width="16*"/>
+                        <ColumnDefinition Width="147*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Enter Password" HorizontalAlignment="Left" Margin="38,21,0,14" Foreground="#bdbdbd" 
+                           FontWeight="SemiBold" Panel.ZIndex="1" IsHitTestVisible="False" Grid.ColumnSpan="3">
+                        <TextBlock.Visibility>
+                            <MultiBinding Converter="{StaticResource MultipleToVis}">
+                                <Binding Path="IsFocused" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" RelativeSource="{RelativeSource AncestorType=PasswordBox}"/>
+                                <Binding Path="Password" Mode="OneWay"  UpdateSourceTrigger="PropertyChanged"/>
+                            </MultiBinding>
+                        </TextBlock.Visibility>
+                    </TextBlock>
+                    <!--Visibility="{Binding Path=IsFocused, ElementName=PasswordBox, Mode=OneWay, Converter={StaticResource MultipleToVis},  ConverterParameter={Binding Password}}"/>-->
+                    <PasswordBox Name="PasswordBox" HorizontalAlignment="Left" 
+                      VerticalAlignment="Top" 
+                     Width="220" Height="33" TabIndex="2"
+                     f:PasswordBoxAssistant.BindPassword="true" 
+                     f:PasswordBoxAssistant.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     VerticalContentAlignment="Center" Margin="8,13,0,0" Grid.ColumnSpan="3"/>
+                    <Icon:PackIconMaterial Kind="LockOutline" Width="14" Foreground="#c7c7c7" Margin="14,21,0,0"/>
+                </Grid>
+                <Grid Height="53">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="121*"/>
+                        <ColumnDefinition Width="279*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="btnLogin" Grid.Column="0" Content="Login" Command="{Binding LoginCommand}"
+                         Style="{StaticResource mainButton}" Height="30" Width="85"
+                         BorderBrush="#3AA9AD" Background="#3AA9AD" Foreground="#FFFFFF"
+                        TabIndex="3" Margin="18,13,133,10" Grid.ColumnSpan="2"/>
+                    <Button x:Name="btnCancel"
+                        Content="Cancel" HorizontalAlignment="Left"  Style="{StaticResource mainButton}"
+                         VerticalAlignment="Top" BorderBrush="DimGray" Background="#FFFFFF" Foreground="#1c1c1c"
+                        Height="30" Width="85" IsCancel="True" TabIndex="4" Margin="51,13,0,0" Grid.Column="1"/>
+                </Grid>
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>

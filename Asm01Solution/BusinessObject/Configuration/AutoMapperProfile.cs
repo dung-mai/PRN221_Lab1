@@ -14,11 +14,17 @@ namespace BusinessObject.Configuration
     {
         public AutoMapperProfile() 
         {
-            CreateMap<Product, ProductObject>().ReverseMap();
-            CreateMap<Order, OrderObject>().ReverseMap();
-            CreateMap<DataAccess.Models.Member, MemberObject>().ReverseMap();
-            CreateMap<OrderDetail, OrderDetailObject>().ReverseMap();
 
+            CreateMap<Product, ProductObject>().ReverseMap();
+            CreateMap<Order, OrderObject>()
+                    .ForMember(dest => dest.Member, opt => opt.MapFrom(src => src.Member))
+                    .ReverseMap()
+                    .ForMember(dest => dest.Member, opt => opt.MapFrom(src => src.Member));
+            CreateMap<DataAccess.Models.Member, MemberObject>()
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => $"{src.City}, {src.Country}")).ReverseMap();
+            CreateMap<OrderDetail, OrderDetailObject>()
+                    .ForMember(dest => dest.Total, opt => opt.MapFrom(src => src.Quantity * (double)src.UnitPrice * (1 - src.Discount)))
+                    .ReverseMap();
         }
     }
 }

@@ -53,16 +53,14 @@ namespace SalesWFPApp
             services.AddScoped<IOrderDetailService, OrderDetailService>();
             services.AddScoped<IOrderService, OrderService>();
 
+            services.AddSingleton<EventAggregator>();
             services.AddSingleton<ProductViewModel>();
             services.AddSingleton<MemberViewModel>();
             services.AddSingleton<OrderViewModel>();
+            services.AddSingleton<LoginViewModel>();
+            services.AddSingleton<ViewOrderDetailViewModel>();
 
         }
-
-        //private void OnStartUp(Object sender, StartupEventArgs e)
-        //{
-            
-        //}
 
         //protected override void OnStartup(StartupEventArgs e)
         //{

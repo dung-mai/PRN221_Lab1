@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
@@ -50,14 +51,39 @@ namespace DataAccess.Repository
             }
         }
 
+        public Order? GetAllOrderInfoById(int id)
+        {
+            return _context.Orders
+                            .Include(o => o.Member) // include the Member object
+                            .Include(o => o.OrderDetails).
+                            FirstOrDefault(o => o.OrderId == id);
+        }
+
         public List<Order> GetAllOrders()
         {
-            return _context.Orders.ToList();
+            return _context.Orders
+                            .Include(o => o.Member)
+                            .Include(o => o.OrderDetails).ToList();
         }
 
         public Order? GetOrderById(int id)
         {
             return _context.Orders.FirstOrDefault(o => o.OrderId == id);
+        }
+
+        public List<Order> SearchByFilter(string? email, DateTime? startDate, DateTime? endDate)
+        {
+            email = (email != null) ? email : "";
+            startDate = startDate != null ? startDate : DateTime.MinValue;
+            endDate = endDate != null ? endDate : DateTime.MaxValue;
+
+            return _context.Orders
+                   .Include(o => o.Member)
+                   .Include(o => o.OrderDetails)
+                   .Where(o => o.Member.Email.StartsWith(email)
+                                && DateTime.Compare(o.OrderDate, startDate.Value) >= 0
+                                && DateTime.Compare(o.OrderDate, endDate.Value) <= 0)
+                   .ToList();
         }
 
         public void UpdateOrder(Order order)

@@ -13,6 +13,8 @@ namespace DataAccess.Repository
         public void UpdateOrder(Order order);
         public void DeleteOrder(Order order);
         public Order? GetOrderById(int id);
+        public Order? GetAllOrderInfoById(int id);
         public List<Order> GetAllOrders();
+        public List<Order> SearchByFilter(string? email, DateTime? startDate, DateTime? endDate);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusinessLayer.BusinessObject;
+using BusinessLayer.Validator;
 using DataAccess;
 using DataAccess.Models;
 using DataAccess.Repository;
@@ -48,6 +49,24 @@ namespace BusinessLayer.Services
         {
             var member = _mapper.Map<Member>(memberBO);
             _memberRepository.UpdateMember(member);
+        }
+
+        public ValidationObject Login(string email, string password)
+        {
+            Member? member = _memberRepository.GetMemberByEmail(email);
+            if(member == null)
+            {
+                return new ValidationObject(false, "Account not exists!");
+            } else
+            {
+                if (!member.Password.Equals(password))
+                {
+                    return new ValidationObject(false, "Please check your password!");
+                } else
+                {
+                    return new ValidationObject(true, "Login successfully!");
+                }
+            }
         }
     }
 }

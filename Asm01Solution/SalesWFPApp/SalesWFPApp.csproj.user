@@ -13,18 +13,30 @@
     <Compile Update="View\MemberWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\MenuBar.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\OrderDetailWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\OrderManagementWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="View\MainWindow.xaml">
+    <Page Update="View\OrderDetailWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\ProductWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\LoginWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\MemberWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\MenuBar.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\OrderManagementWindow.xaml">

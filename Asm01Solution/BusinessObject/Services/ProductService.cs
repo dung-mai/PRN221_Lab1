@@ -24,12 +24,6 @@ namespace BusinessLayer.Services
 
         public void AddProduct(ProductObject productBO)
         {
-            //Validate
-            //1. not null, phai nhap so....
-            //2. # null, object không tồn tại (tạo tài khoản....)
-
-
-            //map
             var product = _mapper.Map<Product>(productBO);
             _productRepository.AddProduct(product);
         }

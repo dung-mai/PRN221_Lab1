@@ -26,6 +26,7 @@ namespace SalesWFPApp.View
             InitializeComponent();
             var orderViewModel = ((App)Application.Current).ServiceProvider.GetRequiredService<OrderViewModel>();
             DataContext = orderViewModel;
+            EventAggregator.Instance.Subscribe("CloseOrderMgmtWindow", p => { Close(); });
         }
     }
 }

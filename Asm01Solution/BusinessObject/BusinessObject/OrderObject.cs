@@ -18,9 +18,20 @@ namespace BusinessLayer.BusinessObject
         public DateTime? ShippedDate { get; set; }
         public decimal? Freight { get; set; }
 
-        public virtual Member Member { get; set; } = null!;
+        public virtual MemberObject Member { get; set; } = null!;
         public virtual ICollection<OrderDetailObject> OrderDetails { get; set; }
 
+        public double _totalMoney = 0;
+        public double TotalMoney { 
+            get {
+                _totalMoney = 0;
+                OrderDetails.ToList().ForEach(o =>
+                {
+                    _totalMoney += o.Quantity * (double)o.UnitPrice * (1 - o.Discount);
+                });
+                return _totalMoney + (Freight != null ?  (double) Freight : 0);
+            }
+        }
 
     }
 }

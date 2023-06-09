@@ -6,102 +6,70 @@
         xmlns:local="clr-namespace:SalesWFPApp.View"
         mc:Ignorable="d"
         Title="Member Management" Height="450" Width="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <DockPanel Height="22" VerticalAlignment="Top">
-            <Menu DockPanel.Dock="Top">
-                <MenuItem Header="Management">
-                    <MenuItem Header="Product Management" Name="menuProduct" />
-                    <MenuItem Header="Order Management" Name="menuOrder"/>
-                    <Separator />
-                    <MenuItem Header="Exit" Name="menuExit"/>
-                </MenuItem>
-            </Menu>
-        </DockPanel>
-        <Label Content="Member ID" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"/>
-        <TextBox Name="txtMemberId" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="118,30,0,0" 
+    <StackPanel>
+        <local:MenuBar/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label Content="Member ID" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="txtMemberId" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="118,30,0,0" 
                  TextWrapping="Wrap" VerticalAlignment="Top" Width="184" Height="26" IsReadOnly="True"
-                 Text="{Binding Path=MemberId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
-                                Converter={StaticResource NullToEmptyStringConverter}, 
-                                    ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"
+                 Text="{Binding MemberId, Converter={StaticResource NullToEmptyStringConverter}, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}"
                         Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
 
-        <Label Content="Email" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtEmail" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="118,67,0,0" 
+            <Label Content="Email" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="txtEmail" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="118,67,0,0" 
             TextWrapping="Wrap" VerticalAlignment="Top" Width="184" Height="26"
-                 Text="{Binding Path=Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
-                                Converter={StaticResource NullToEmptyStringConverter}, 
-                                    ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"
+                 Text="{Binding Email, Converter={StaticResource NullToEmptyStringConverter}, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}"
                         Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
 
-        <Label Content="Company Name" HorizontalAlignment="Left" Margin="10,104,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtCompany" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="118,104,0,0" 
+            <Label Content="Company Name" HorizontalAlignment="Left" Margin="10,104,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="txtCompany" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="118,104,0,0" 
             TextWrapping="Wrap" VerticalAlignment="Top" Width="184" Height="26"
-                 Text="{Binding Path=CompanyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
-                                Converter={StaticResource NullToEmptyStringConverter}, 
-                                    ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"
+                 Text="{Binding CompanyName, Converter={StaticResource NullToEmptyStringConverter}, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}"
                         Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
 
-        <Label Content="Password" HorizontalAlignment="Left" Margin="324,30,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtPassword" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="432,30,0,0" 
+            <Label Content="Password" HorizontalAlignment="Left" Margin="324,30,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="txtPassword" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="432,30,0,0" 
              VerticalAlignment="Top" Width="184" Height="26"
-                 Text="{Binding Path=Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
-                                Converter={StaticResource NullToEmptyStringConverter}, 
-                                    ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"
+                 Text="{Binding Password, Converter={StaticResource NullToEmptyStringConverter}, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}"
                         Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
 
-        <Label Content="City" HorizontalAlignment="Left" Margin="327,67,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtCity" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="432,67,0,0" 
+            <Label Content="City" HorizontalAlignment="Left" Margin="327,67,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="txtCity" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="432,67,0,0" 
             TextWrapping="Wrap" VerticalAlignment="Top" Width="184" Height="26"
-                 Text="{Binding Path=City, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
-                                Converter={StaticResource NullToEmptyStringConverter}, 
-                                    ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"
+                 Text="{Binding City, Converter={StaticResource NullToEmptyStringConverter}, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}"
                         Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
 
-        <Label Content="Country" HorizontalAlignment="Left" Margin="324,104,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtCountry" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="432,104,0,0" 
+            <Label Content="Country" HorizontalAlignment="Left" Margin="324,104,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="txtCountry" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="432,104,0,0" 
             TextWrapping="Wrap" VerticalAlignment="Top" Width="184" Height="26"
-                 Text="{Binding Path=Country, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
-                                Converter={StaticResource NullToEmptyStringConverter}, 
-                                    ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"
+                 Text="{Binding Country, Converter={StaticResource NullToEmptyStringConverter}, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}"
                         Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
 
-        <Button Content="Load" Name="btnLoad" Command="{Binding AddMemberCommand}" HorizontalAlignment="Left" Margin="58,161,0,0" VerticalAlignment="Top" Width="118" Height="25"/>
-        <Button Content="New" x:Name="btnNew" Command="{Binding AddMemberCommand}" HorizontalAlignment="Center" Margin="0,161,0,0" VerticalAlignment="Top" Width="118" Height="25"/>
-        <Button Content="Update" x:Name="btnUpdate" Command="{Binding UpdateMemberCommand}" HorizontalAlignment="Left" Margin="476,161,0,0" VerticalAlignment="Top" Width="118" Height="25"/>
-        <Button Content="Delete" x:Name="btnDelete" Command="{Binding DeleteMemberCommand}" HorizontalAlignment="Left" Margin="609,161,0,0" VerticalAlignment="Top" Width="118" Height="25"/>
+            <Button Content="New" x:Name="btnNew" Command="{Binding AddMemberCommand}" HorizontalAlignment="Left" Margin="58,161,0,0" VerticalAlignment="Top" Width="118" Height="25"/>
+            <Button Content="Update" x:Name="btnUpdate" Command="{Binding UpdateMemberCommand}" CommandParameter="{Binding CurMember}" HorizontalAlignment="Left" Margin="195,161,0,0" VerticalAlignment="Top" Width="118" Height="25"/>
+            <Button Content="Delete" x:Name="btnDelete" Command="{Binding DeleteMemberCommand}" CommandParameter="{Binding CurMember}" HorizontalAlignment="Left" Margin="327,161,0,0" VerticalAlignment="Top" Width="118" Height="25"/>
+            <Button Content="Reset" x:Name="btnReset" Command="{Binding ResetCommand}" HorizontalAlignment="Left" Margin="465,161,0,0" VerticalAlignment="Top" Width="118" Height="25"/>
 
-        <ListView Name="listMembers" HorizontalAlignment="Left" Height="267" 
+            <ListView x:Name="listMembers" HorizontalAlignment="Left" Height="267" 
                   Margin="10,20,0,0" VerticalAlignment="Top" Width="606" Grid.Row="1"  
                   ItemsSource="{Binding Members, Mode=TwoWay, UpdateSourceTrigger=Explicit}" 
                   SelectedItem="{Binding CurMember, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-            <!--<ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Center" />
-                    <EventSetter Event="MouseDoubleClick" />
-                </Style>
-            </ListView.ItemContainerStyle>-->
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Member ID" DisplayMemberBinding="{Binding MemberId}" Width="75" />
-                    <GridViewColumn Header="Email" DisplayMemberBinding="{Binding Email}" Width="150"/>
-                    <GridViewColumn Header="Company Name" DisplayMemberBinding="{Binding CompanyName}" Width="100"/>
-                    <GridViewColumn Header="City" DisplayMemberBinding="{Binding City}" Width="100" />
-                    <GridViewColumn Header="Country" DisplayMemberBinding="{Binding Country}" Width="75" />
-                    <GridViewColumn Header="Password" DisplayMemberBinding="{Binding Password}" Width="100"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <!--<DockPanel Height="30" VerticalAlignment="Top" Margin="0,310,0,0" Grid.Row="2">
-            <StatusBar DockPanel.Dock="Bottom">
-                <StatusBarItem>
-                    <TextBlock x:Name="lblStatus" />
-                </StatusBarItem>
-            </StatusBar>
-        </DockPanel>-->
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Member ID" DisplayMemberBinding="{Binding MemberId}" Width="75" />
+                        <GridViewColumn Header="Email" DisplayMemberBinding="{Binding Email}" Width="150"/>
+                        <GridViewColumn Header="Company Name" DisplayMemberBinding="{Binding CompanyName}" Width="100"/>
+                        <GridViewColumn Header="City" DisplayMemberBinding="{Binding City}" Width="100" />
+                        <GridViewColumn Header="Country" DisplayMemberBinding="{Binding Country}" Width="75" />
+                        <GridViewColumn Header="Password" DisplayMemberBinding="{Binding Password}" Width="100"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
 
-    </Grid>
+        </Grid>
+    </StackPanel>
 </Window>

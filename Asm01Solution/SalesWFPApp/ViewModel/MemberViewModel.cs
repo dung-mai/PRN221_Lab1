@@ -1,6 +1,10 @@
 ﻿using BusinessLayer.BusinessObject;
 using BusinessLayer.Services;
 using CommunityToolkit.Mvvm.Input;
+using DataAccess.Models;
+using FluentValidation;
+using SalesWFPApp.HelperObject;
+using SalesWFPApp.Validator;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,12 +12,14 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Media3D;
 
 namespace SalesWFPApp.ViewModel
 {
-    public class MemberViewModel : INotifyPropertyChanged, IDataErrorInfo
+    public class MemberViewModel : BaseViewModel
     {
         private readonly IMemberService _memberService;
+        private MemberViewModelValidator validator;
 
         private int _memberId;
         public int MemberId
@@ -32,6 +38,7 @@ namespace SalesWFPApp.ViewModel
             set
             {
                 _email = value;
+                ValidateProperty(nameof(Email), value);
                 OnPropertyChanged(nameof(Email));
             }
         }
@@ -42,6 +49,7 @@ namespace SalesWFPApp.ViewModel
             set
             {
                 _city = value;
+                ValidateProperty(nameof(City), value);
                 OnPropertyChanged(nameof(City));
             }
         }
@@ -52,6 +60,7 @@ namespace SalesWFPApp.ViewModel
             set
             {
                 _country = value;
+                ValidateProperty(nameof(Country), value);
                 OnPropertyChanged(nameof(Country));
             }
         }
@@ -62,6 +71,7 @@ namespace SalesWFPApp.ViewModel
             set
             {
                 _password = value;
+                ValidateProperty(nameof(Password), value);
                 OnPropertyChanged(nameof(Password));
             }
         }
@@ -72,6 +82,7 @@ namespace SalesWFPApp.ViewModel
             set
             {
                 _companyName = value;
+                ValidateProperty(nameof(CompanyName), value);
                 OnPropertyChanged(nameof(CompanyName));
             }
         }
@@ -95,16 +106,6 @@ namespace SalesWFPApp.ViewModel
                 OnPropertyChanged(nameof(CurMember));
             }
         }
-        private bool isCommandExecuted;
-        public bool IsCommandExecuted
-        {
-            get => isCommandExecuted;
-            set
-            {
-                isCommandExecuted = value;
-                OnPropertyChanged(nameof(IsCommandExecuted));
-            }
-        }
 
         public ObservableCollection<MemberObject> Members { get; set; }
 
@@ -116,70 +117,93 @@ namespace SalesWFPApp.ViewModel
         public MemberViewModel(IMemberService memberService)
         {
             _memberService = memberService;
+            validator = new MemberViewModelValidator();
             LoadAllMembers();
             DefineRelayCommand();
-            IsCommandExecuted = false;
         }
-
 
         private void DefineRelayCommand()
         {
-            AddMemberCommand = new RelayCommand<MemberObject>(
-                p =>
-                {
-                    ///logic
-                    MemberObject member = new MemberObject
-                    {
-                        MemberId = _memberId,
-                        Email = _email,
-                        City = _city,
-                        Password = _password,
-                        CompanyName = _companyName,
-                        Country = _country
-                    };
-                    _memberService.AddMember(member);
-                    LoadAllMembers();
-                    OnPropertyChanged(nameof(Members));
-                    IsCommandExecuted = true;
-                },
-                p => true);
-            UpdateMemberCommand = new RelayCommand<MemberObject>(
-                p =>
-                {
-                    CurMember.Email = Email;
-                    CurMember.City = City;
-                    CurMember.Password = Password;
-                    CurMember.Country = Country;
-                    CurMember.CompanyName = CompanyName;
+            AddMemberCommand = new RelayCommand<MemberObject>(AddNewMember, m => true);
+            UpdateMemberCommand = new RelayCommand<MemberObject>(UpdateMember, m => true);
+            DeleteMemberCommand = new RelayCommand<MemberObject>(DeleteMember, m => true);
+            ResetCommand = new RelayCommand(ResetTextbox);
+        }
 
-                    //update in db
-                    _memberService.UpdateMember(CurMember);
+        private void DeleteMember(MemberObject? member)
+        {
+            _memberService.DeleteMember(CurMember);
+            NotificationObject.DisplayMessage("Delete successfully!");
 
-                    //update for Members List in L
-                    LoadAllMembers();
-                    OnPropertyChanged(nameof(Members));
-                    IsCommandExecuted = true;
-                },
-                p => true);
-            DeleteMemberCommand = new RelayCommand<MemberObject>(
-                p =>
-                {
-                    _memberService.DeleteMember(CurMember);
-                    Members.Remove(CurMember);
-                },
-                p => true);
+            Members.Remove(CurMember);
+            ResetTextbox();
+        }
 
-            ResetCommand = new RelayCommand(() =>
+        private async void UpdateMember(MemberObject? member)
+        {
+            var result = await validator.ValidateAsync(this);
+            if (result.IsValid)
             {
-                MemberId = 0;
-                Email = "";
-                City = "";
-                Password = "";
-                CompanyName = "";
-                Country = "";
+                CurMember.Email = Email;
+                CurMember.City = City;
+                CurMember.Password = Password;
+                CurMember.Country = Country;
+                CurMember.CompanyName = CompanyName;
 
-                IsCommandExecuted = false;
-            });
+                //update in db
+                _memberService.UpdateMember(CurMember);
+                NotificationObject.DisplayMessage("Update successfully!");
+
+                //update UI
+                LoadAllMembers();
+                OnPropertyChanged(nameof(Members));
+                ResetTextbox();
+            }
+            else
+            {
+                NotificationObject.DisplayMessage("Please enter again!");
+            }
+        }
+
+        private async void AddNewMember(MemberObject? m)
+        {
+            var result = await validator.ValidateAsync(this);
+            if (result.IsValid)
+            {
+                ///logic
+                MemberObject member = new MemberObject
+                {
+                    MemberId = _memberId,
+                    Email = _email,
+                    City = _city,
+                    Password = _password,
+                    CompanyName = _companyName,
+                    Country = _country
+                };
+                _memberService.AddMember(member);
+                NotificationObject.DisplayMessage("Added successfully!");
+
+                //UDPATE UI
+                LoadAllMembers();
+                OnPropertyChanged(nameof(Members));
+                ResetTextbox();
+            }
+            else
+            {
+                NotificationObject.DisplayMessage("Please enter again!");
+            }
+        }
+
+        private void ResetTextbox()
+        {
+            SkipValidation(true);
+            MemberId = 0;
+            Email = "";
+            City = "";
+            Password = "";
+            CompanyName = "";
+            Country = "";
+            SkipValidation(false);
         }
 
         private void LoadAllMembers()
@@ -187,57 +211,19 @@ namespace SalesWFPApp.ViewModel
             Members = new ObservableCollection<MemberObject>(_memberService.GetAllMembers());
         }
 
-
-        public string this[string columnName]
+        private async void ValidateProperty(string propertyName, object value)
         {
-            get
+            var result = await validator.ValidateAsync(this);
+            var errors = result.Errors.Where(e => e.PropertyName == propertyName).ToList();
+            if (errors.Any())
             {
-                string error = null;
-                switch (columnName)
-                {
-                    case nameof(Email):
-                        if (string.IsNullOrEmpty(Email))
-                        {
-                            error = "Email is required.";
-                        }
-                        break;
-                    case nameof(Password):
-                        if (string.IsNullOrEmpty(Email))
-                        {
-                            error = "Email is required.";
-                        }
-                        break;
-                    case nameof(Country):
-                        if (string.IsNullOrEmpty(Country))
-                        {
-                            error = "Country is required.";
-                        }
-                        break;
-                    case nameof(CompanyName):
-                        if (string.IsNullOrEmpty(CompanyName))
-                        {
-                            error = "CompanyName is required.";
-                        }
-                        break;
-                    case nameof(City):
-                        if (string.IsNullOrEmpty(City))
-                        {
-                            error = "City is required.";
-                        }
-                        break;
-                }
-                return error;
+                var errorMsg = string.Join(Environment.NewLine, errors.Select(e => e.ErrorMessage));
+                SetError(propertyName, errorMsg);
             }
-        }
-
-        public string Error => null;
-        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            else
+            {
+                ClearError(propertyName);
+            }
         }
     }
 }

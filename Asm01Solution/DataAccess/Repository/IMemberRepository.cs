@@ -14,5 +14,6 @@ namespace DataAccess.Repository
         public void DeleteMember(Member member);
         public Member? GetMemberById(int id);
         public List<Member> GetAllMembers();
+        public Member? GetMemberByEmail(string? email);
     }
 }

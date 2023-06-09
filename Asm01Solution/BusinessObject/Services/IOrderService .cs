@@ -13,6 +13,8 @@ namespace BusinessLayer.Services
         public void UpdateOrder(OrderObject orderBO);
         public void DeleteOrder(OrderObject orderBO);
         public OrderObject? GetOrderById(int id);
+        public OrderObject? GetAllOrderInfoById(int id);
         public List<OrderObject> GetAllOrders();
+        public List<OrderObject> SearchByFilter(string? email, DateTime? startDate, DateTime? endDate);
     }
 }

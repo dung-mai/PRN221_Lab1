@@ -19,17 +19,24 @@ namespace DataAccess.Repository
 
         public void AddMember(Member member)
         {
-            if (member != null)
+            try
             {
-                _context.Members.Add(new Member
+                if (member != null)
                 {
-                    City = member.City,
-                    Country = member.Country,
-                    CompanyName = member.CompanyName,
-                    Email = member.Email,
-                    Password = member.Password
-                });
-                _context.SaveChanges();
+                    _context.Members.Add(new Member
+                    {
+                        City = member.City,
+                        Country = member.Country,
+                        CompanyName = member.CompanyName,
+                        Email = member.Email,
+                        Password = member.Password
+                    });
+                    _context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 
@@ -85,6 +92,11 @@ namespace DataAccess.Repository
         public Member? GetMemberById(int id)
         {
             return _context.Members.FirstOrDefault(m => m.MemberId == id);
+        }
+
+        public Member? GetMemberByEmail(string? email)
+        {
+            return _context.Members.FirstOrDefault(m => m.Email.Equals(email));
         }
     }
 }
