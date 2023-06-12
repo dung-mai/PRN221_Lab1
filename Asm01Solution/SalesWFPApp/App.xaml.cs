@@ -59,6 +59,8 @@ namespace SalesWFPApp
             services.AddSingleton<OrderViewModel>();
             services.AddSingleton<LoginViewModel>();
             services.AddSingleton<ViewOrderDetailViewModel>();
+            services.AddScoped<AddOrderItemViewModel>();
+            services.AddScoped<ProgressOrderViewModel>();
 
         }
 

@@ -14,5 +14,6 @@ namespace BusinessLayer.Services
         public void DeleteProduct(ProductObject productBO);
         public ProductObject? GetProductById(int id);
         public List<ProductObject> GetAllProducts();
+        public List<ProductObject> SearchByFilter(int productId, int categoryId, string productName);
     }
 }

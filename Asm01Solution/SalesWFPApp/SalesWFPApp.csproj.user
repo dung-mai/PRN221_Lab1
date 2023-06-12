@@ -7,6 +7,9 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="View\AddOrderItemWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\LoginWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -22,8 +25,14 @@
     <Compile Update="View\OrderManagementWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\ProgressOrderWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="View\AddOrderItemWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="View\OrderDetailWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -40,6 +49,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\OrderManagementWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\ProgressOrderWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

@@ -14,6 +14,6 @@ namespace BusinessLayer.BusinessObject
         public double Total { get; set; }
 
         public virtual OrderObject Order { get; set; } = null!;
-        public virtual Product Product { get; set; } = null!;
+        public virtual ProductObject Product { get; set; } = null!;
     }
 }

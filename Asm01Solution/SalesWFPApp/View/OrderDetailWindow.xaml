@@ -63,8 +63,7 @@
         <Label Content="Freight" HorizontalAlignment="Left" Margin="285,104,0,0" VerticalAlignment="Top" Width="48"/>
         <TextBox x:Name="txtFreight" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="388,104,0,0" 
             TextWrapping="Wrap" VerticalAlignment="Top" Width="152" Height="26" 
-                 Text="{Binding Path=Freight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
-                                Converter={StaticResource NullToEmptyStringConverter}, 
+                 Text="{Binding Path=Freight, StringFormat='#,0', Mode =TwoWay, UpdateSourceTrigger=PropertyChanged,
                                     ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"
                         Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
 
@@ -96,7 +95,7 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Product ID" DisplayMemberBinding="{Binding ProductId}" Width="60" />
-                    <GridViewColumn Header="Unit Price" DisplayMemberBinding="{Binding UnitPrice}" Width="140"/>
+                    <GridViewColumn Header="Unit Price" DisplayMemberBinding="{Binding UnitPrice, StringFormat='#,0'}" Width="140"/>
                     <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding Quantity}" Width="100"/>
                     <GridViewColumn Header="Discount" DisplayMemberBinding="{Binding Discount}" Width="140" />
                     <GridViewColumn Header="Total" DisplayMemberBinding="{Binding Total}" Width="130" />
@@ -105,23 +104,24 @@
         </ListView>
         <!--</ScrollContentPresenter>-->
 
-        <Grid Grid.Row="2" Grid.Column="1">
+        <Grid Grid.Row="2" Grid.Column="1" Margin="0,0,277,0" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-
-            <Button IsDefault="True" Grid.Row="0" Height="30"
+            <Button  IsDefault="True" Grid.Row="0" Height="30"
+                    Name="btnUpdate"  Width="100" Command="{Binding UpdateOrderCommand}"
+                    HorizontalAlignment="Left"  >Update</Button>
+            
+            <Button IsDefault="True" Grid.Row="1" Height="30"
                     Name="btnBack" Width="100" Command="{Binding BackCommand}"
                     HorizontalAlignment="Left" >Back</Button>
 
-            <Button  IsDefault="True" Grid.Row="1" Height="30"
+            <Button  IsDefault="True" Grid.Row="2" Height="30"
                 x:Name="btnAdd" Width="100"
                 HorizontalAlignment="Left" Content="Add"/>
-            <Button  IsDefault="True" Grid.Row="2" Height="30"
-                    Name="btnUpdate"  Width="100"
-                    HorizontalAlignment="Left"  >Update</Button>
+            
         </Grid>
     </Grid>
 </Window>

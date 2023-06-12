@@ -14,5 +14,6 @@ namespace DataAccess.Repository
         public void DeleteProduct(Product product);
         public Product? GetProductById(int id);
         public List<Product> GetAllProducts();
+        public List<Product> SearchByFilter(int productId, int categoryId, string productName);
     }
 }

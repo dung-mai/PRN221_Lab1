@@ -2,6 +2,7 @@
 using BusinessLayer.Services;
 using CommunityToolkit.Mvvm.Input;
 using DataAccess.Models;
+using SalesWFPApp.HelperObject;
 using SalesWFPApp.View;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace SalesWFPApp.ViewModel
 {
@@ -77,6 +79,16 @@ namespace SalesWFPApp.ViewModel
                 OnPropertyChanged(nameof(Email));
             }
         }
+        private string? _emptyMess;
+        public string? EmptyMess
+        {
+            get { return _emptyMess; }
+            set
+            {
+                _emptyMess = value;
+                OnPropertyChanged(nameof(EmptyMess));
+            }
+        }
         private OrderObject _curOrder;
         public OrderObject CurOrder
         {
@@ -90,8 +102,9 @@ namespace SalesWFPApp.ViewModel
 
         public ObservableCollection<OrderObject> Orders { get; set; }
 
-        public RelayCommand<OrderObject> AddOrderCommand { get; set; }
+        public RelayCommand AddOrderCommand { get; set; }
         public RelayCommand ViewCommand { get; set; }
+        public RelayCommand ResetCommand { get; set; }
         public RelayCommand SearchOrderCommand { get; set; }
 
         public OrderViewModel(IOrderService memberService)
@@ -104,46 +117,7 @@ namespace SalesWFPApp.ViewModel
 
         private void DefineRelayCommand()
         {
-            AddOrderCommand = new RelayCommand<OrderObject>(
-                p =>
-                {
-                    /////logic
-                    //OrderObject member = new OrderObject
-                    //{
-                    //    OrderId = _orderId,
-                    //    MemberId = _memberId,
-                    //    OrderDate = _orderDate,
-                    //    ShippedDate = _shippedDate,
-                    //    Freight = _freight,
-                    //    RequiredDate = _requiredDate
-                    //};
-                    //_orderService.AddOrder(member);
-                    //LoadAllOrders();
-                    //OnPropertyChanged(nameof(Orders));
-                },
-                p => true);
-
-            //UpdateOrderCommand = new RelayCommand<OrderObject>(
-            //    p =>
-            //    {
-            //        if(CurOrder == null)
-            //        {
-            //            CurOrder = new OrderObject();
-            //        }
-            //        CurOrder.MemberId = MemberId;
-            //        CurOrder.OrderDate = OrderDate;
-            //        CurOrder.ShippedDate = ShippedDate;
-            //        CurOrder.RequiredDate = RequiredDate;
-            //        CurOrder.Freight = Freight;
-
-            //        //update in db
-            //        _orderService.UpdateOrder(CurOrder);
-
-            //        //update for Orders List in L
-            //        LoadAllOrders();
-            //        OnPropertyChanged(nameof(Orders));
-            //    },
-            //    p => true);
+            AddOrderCommand = new RelayCommand(GoToAddOrder);
             //DeleteOrderCommand = new RelayCommand<OrderObject>(
             //    p =>
             //    {
@@ -152,25 +126,61 @@ namespace SalesWFPApp.ViewModel
             //    },
             //    p => true);
 
-            ViewCommand = new RelayCommand(() =>
+            ViewCommand = new RelayCommand(ViewOrderDetail);
+            ResetCommand = new RelayCommand(ResetOrderFilter);
+
+            SearchOrderCommand = new RelayCommand(SearchOrder);
+
+            
+
+        }
+
+        private void GoToAddOrder()
+        {
+            var addOrderItemWindow = new AddOrderItemWindow();
+            EventAggregator.Instance.Publish("CloseOrderMgmtWindow", true);
+            addOrderItemWindow.Show();
+        }
+
+        private void ResetOrderFilter()
+        {
+            Email = "";
+            StartDate = null; 
+            EndDate = null;
+            SearchOrder();
+        }
+
+        private void SearchOrder()
+        {
+            Orders = new ObservableCollection<OrderObject>(_orderService.SearchByFilter(_email, _startDate, _endDate));
+            if(Orders.Count == 0)
             {
-                //EventAggregator.Instance.Publish("ViewOrderDetail", CurOrder.OrderId);
+                EmptyMess = "Không có kết quả nào phù hợp";
+            } else
+            {
+                EmptyMess = null;
+
+            }
+            OnPropertyChanged(nameof(Orders));
+        }
+
+        private void ViewOrderDetail()
+        {
+            if (CurOrder != null)
+            {
                 var orderdetailViewModel = new ViewOrderDetailViewModel(_orderService, CurOrder.OrderId);
                 var orderDetailWindow = new OrderDetailWindow();
                 EventAggregator.Instance.Publish("CloseOrderMgmtWindow", true);
                 orderDetailWindow.DataContext = orderdetailViewModel;
                 orderDetailWindow.Show();
-            });
-
-            SearchOrderCommand = new RelayCommand(() =>
+            }
+            else
             {
-                Orders = new ObservableCollection<OrderObject>(_orderService.SearchByFilter(_email, _startDate, _endDate));
-                OnPropertyChanged(nameof(Orders));
-            });
-
+                NotificationObject.DisplayMessage("Please select an order!");
+            }
         }
 
-        private void LoadAllOrders()
+        public void LoadAllOrders()
         {
             Orders = new ObservableCollection<OrderObject>(_orderService.GetAllOrders());
         }

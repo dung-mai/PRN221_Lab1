@@ -74,8 +74,9 @@ namespace DataAccess.Repository
         public List<Order> SearchByFilter(string? email, DateTime? startDate, DateTime? endDate)
         {
             email = (email != null) ? email : "";
-            startDate = startDate != null ? startDate : DateTime.MinValue;
-            endDate = endDate != null ? endDate : DateTime.MaxValue;
+            startDate = startDate != null ? startDate : System.Data.SqlTypes.SqlDateTime.MinValue.Value;
+            endDate = endDate != null ? endDate : System.Data.SqlTypes.SqlDateTime.MaxValue.Value;
+
 
             return _context.Orders
                    .Include(o => o.Member)

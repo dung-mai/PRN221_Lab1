@@ -161,3 +161,7 @@ C:\Users\Admin\Documents\GitHub\PRN221\Asm01Solution\SalesWFPApp\bin\Debug\net6.
 C:\Users\Admin\Documents\GitHub\PRN221\Asm01Solution\SalesWFPApp\obj\Debug\net6.0-windows\View\OrderDetailWindow.g.cs
 C:\Users\Admin\Documents\GitHub\PRN221\Asm01Solution\SalesWFPApp\obj\Debug\net6.0-windows\View\OrderDetailWindow.baml
 C:\Users\Admin\Documents\GitHub\PRN221\Asm01Solution\SalesWFPApp\bin\Debug\net6.0-windows\Microsoft.Xaml.Behaviors.dll
+C:\Users\Admin\Documents\GitHub\PRN221\Asm01Solution\SalesWFPApp\obj\Debug\net6.0-windows\View\AddOrderItemWindow.g.cs
+C:\Users\Admin\Documents\GitHub\PRN221\Asm01Solution\SalesWFPApp\obj\Debug\net6.0-windows\View\AddOrderItemWindow.baml
+C:\Users\Admin\Documents\GitHub\PRN221\Asm01Solution\SalesWFPApp\obj\Debug\net6.0-windows\View\ProgressOrderWindow.g.cs
+C:\Users\Admin\Documents\GitHub\PRN221\Asm01Solution\SalesWFPApp\obj\Debug\net6.0-windows\View\ProgressOrderWindow.baml

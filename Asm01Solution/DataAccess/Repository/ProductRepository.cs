@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,6 +91,17 @@ namespace DataAccess.Repository
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public List<Product> SearchByFilter(int productId, int categoryId, string productName)
+        {
+            productName = (productName != null) ? productName : "";
+
+            return _context.Products
+                   .Where(o => o.ProductName.ToLower().Contains(productName.ToLower())
+                                && ( (productId == 0) || (o.ProductId == productId) )
+                                && ( (categoryId == 0) || (o.CategoryId == categoryId) ))
+                   .ToList();
         }
     }
 }

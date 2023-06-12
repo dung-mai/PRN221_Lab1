@@ -44,6 +44,12 @@ namespace BusinessLayer.Services
             return _mapper.Map<ProductObject>(_productRepository.GetProductById(id));
         }
 
+        public List<ProductObject> SearchByFilter(int productId, int categoryId, string productName)
+        {
+            return _productRepository.SearchByFilter(productId, categoryId, productName).Select(p => _mapper.Map<ProductObject>(p)).ToList();
+
+        }
+
         public void UpdateProduct(ProductObject productBO)
         {
             var product = _mapper.Map<Product>(productBO);

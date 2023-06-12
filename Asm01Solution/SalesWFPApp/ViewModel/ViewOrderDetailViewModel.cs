@@ -21,7 +21,22 @@ namespace SalesWFPApp.ViewModel
     {
         private readonly IOrderService _orderService;
         private OrderViewModelValidator validator;
-        private bool isModify = false;
+        private bool _isModify = false;
+        public bool IsModify
+        {
+            get { return _isModify; }
+            set
+            {
+                bool raiseChange = !_isModify && value;
+                _isModify = value;
+                if (raiseChange)
+                {
+                    OnPropertyChanged(nameof(IsModify));
+                    // Raise the event when the value of isModify changes
+                    UpdateOrderCommand.NotifyCanExecuteChanged();
+                }
+            }
+        }
 
         private int _orderId;
         public int OrderId
@@ -40,7 +55,7 @@ namespace SalesWFPApp.ViewModel
             set
             {
                 _orderDate = value;
-                isModify = true;
+                IsModify = true;
                 ValidateProperty(nameof(OrderDate), value);
                 ValidateProperty(nameof(ShippedDate), value);
                 OnPropertyChanged(nameof(OrderDate));
@@ -53,7 +68,7 @@ namespace SalesWFPApp.ViewModel
             set
             {
                 _requiredDate = value;
-                isModify = true;
+                IsModify = true;
                 ValidateProperty(nameof(RequiredDate), value);
                 OnPropertyChanged(nameof(RequiredDate));
             }
@@ -68,7 +83,7 @@ namespace SalesWFPApp.ViewModel
                 ValidateProperty(nameof(ShippedDate), value);
                 ValidateProperty(nameof(OrderDate), value);
                 OnPropertyChanged(nameof(ShippedDate));
-                isModify = true;
+                IsModify = true;
             }
         }
         private decimal? _freight;
@@ -78,7 +93,7 @@ namespace SalesWFPApp.ViewModel
             set
             {
                 _freight = value;
-                isModify = true;
+                IsModify = true;
                 ValidateProperty(nameof(Freight), value);
                 OnPropertyChanged(nameof(Freight));
             }
@@ -106,7 +121,7 @@ namespace SalesWFPApp.ViewModel
         }
         public RelayCommand<OrderObject>? DeleteOrderCommand { get; set; }
         public RelayCommand<OrderObject>? AddOrderCommand { get; set; }
-        public RelayCommand<OrderObject>? UpdateOrderCommand { get; set; }
+        public RelayCommand? UpdateOrderCommand { get; set; }
         public RelayCommand<int>? ViewCommand { get; set; }
         public RelayCommand? UpdateCommand { get; set; }
         public RelayCommand? BackCommand { get; set; }
@@ -130,7 +145,7 @@ namespace SalesWFPApp.ViewModel
                 EventAggregator.Instance.Publish("ViewOrderDetail", i);
             });
 
-            UpdateOrderCommand = new RelayCommand<OrderObject>(UpdateOrder, p => isModify);
+            UpdateOrderCommand = new RelayCommand(UpdateOrder, () => IsModify);
 
             BackCommand = new RelayCommand(BackToList);
         }
@@ -138,10 +153,11 @@ namespace SalesWFPApp.ViewModel
         private void BackToList()
         {
             var orderWindow = new OrderManagementWindow();
+            ((OrderViewModel)orderWindow.DataContext).LoadAllOrders();
             orderWindow.Show();
             EventAggregator.Instance.Publish("CloseOrderDetailWindow", true);
         }
-        private async void UpdateOrder(OrderObject? o)
+        private async void UpdateOrder()
         {
             var result = await validator.ValidateAsync(this);
             if (result.IsValid)
@@ -157,6 +173,7 @@ namespace SalesWFPApp.ViewModel
 
                 //update in db
                 _orderService.UpdateOrder(CurOrder);
+                NotificationObject.DisplayMessage("Update successfully!");
             }
             else
             {

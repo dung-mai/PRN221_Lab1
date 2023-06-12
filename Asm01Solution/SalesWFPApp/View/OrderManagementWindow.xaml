@@ -7,7 +7,116 @@
         xmlns:local="clr-namespace:SalesWFPApp.View"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
         Title="Order Management Window" Height="450" Width="830">
-    <StackPanel>
+    <Grid Background="#F2F2F2">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <local:MenuBar/>
+
+        <Grid Grid.Row="1" Background="#F2F2F2" Margin="0,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <GroupBox Grid.Row="0" Margin="10 0 10 10" Background="#FFFFFF">
+                <GroupBox.Header>
+                    <Label Content="Search" FontSize="17" FontWeight="SemiBold" Foreground="#3AA9AD" Height="30"/>
+                </GroupBox.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="20,0,10,0">
+                        <Label Content="Email" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <TextBox x:Name="txtEmail" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"
+                            TextWrapping="Wrap" VerticalAlignment="Top" Width="170" Height="26"
+                                 Text="{Binding Email, Converter={StaticResource NullToEmptyStringConverter}, Mode=TwoWay, 
+                                        NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, 
+                                        ValidatesOnDataErrors=True, ValidatesOnExceptions=True}"
+                                        Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
+                        <Label Content="Start Date" Margin="35,0,0,0"  VerticalAlignment="Center"/>
+                        <xctk:DateTimePicker x:Name="txtStartDate" 
+                                Width="155" Margin="10,0,0,0"
+                                Format="Custom" FormatString="dd/MM/yyyy HH:mm:ss" VerticalContentAlignment="Center"
+                                Value="{Binding StartDate, Mode=TwoWay, 
+                                        NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, 
+                                        ValidatesOnDataErrors=True, ValidatesOnExceptions=True}"
+                                        Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
+                        <Label Margin="35,0,0,0" Content="End Date"  VerticalAlignment="Center"/>
+                        <xctk:DateTimePicker x:Name="txtEndDate" 
+                                Width="155" Margin="10,0,0,0" 
+                                Format="Custom" FormatString="dd/MM/yyyy HH:mm:ss" VerticalContentAlignment="Center"
+                                 Value="{Binding EndDate, Mode=TwoWay, 
+                                        NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, 
+                                        ValidatesOnDataErrors=True, ValidatesOnExceptions=True}"
+                                        Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
+                    </StackPanel>
+                    <Grid Grid.Row="1" Margin="0,10,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Name="btnSearch" Grid.Column="0"
+                                    Style="{StaticResource mainButton}" Height="30" Width="90" Margin="20,5,0,0" 
+                                    BorderBrush="#3AA9AD" Background="#3AA9AD" Foreground="#FFFFFF" 
+                                    Command="{Binding SearchOrderCommand}">
+                                Search
+                            </Button>
+                            <Button Name="btnReset" Grid.Column="1"
+                                    Style="{StaticResource mainButton}" Height="30" Width="90" Margin="20,5,0,0" 
+                                    BorderBrush="#3AA9AD" Background="#FFFFFF" Foreground="#3AA9AD" 
+                                    Command="{Binding ResetCommand}">
+                                Reset
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </GroupBox>
+
+            <StackPanel Grid.Row="1" Margin="0,10,10,0" Background="#FFFFFF">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Name="btnAdd" BorderBrush="#3AA9AD" Background="#3AA9AD" Foreground="#FFFFFF" Grid.Column="1"
+                           Style="{StaticResource mainButton}" Height="30" Width="90" Margin="10 5 10 0" Content="Add" 
+                            Command="{Binding AddOrderCommand}"/>
+                    <Button Name="btnView" Command="{Binding ViewCommand}" Grid.Column="2"
+                             BorderBrush="#3AA9AD" Background="Ivory" Margin="0 5 10 0"
+                            Style="{StaticResource mainButton}" Height="30" Width="90"  Content="View"/>
+                    <Label Grid.Column="0" Content="Order List" FontSize="20" FontWeight="SemiBold" Foreground="#3AA9AD" Margin="10 0 10 0"/>
+                </Grid>
+                <DataGrid x:Name="dgOrders" AutoGenerateColumns="False" CanUserAddRows="False" 
+                          IsReadOnly="True" Margin="10 10 5 10" 
+                          ItemsSource="{Binding Orders, Mode=TwoWay, UpdateSourceTrigger=Explicit}" 
+                          SelectedItem="{Binding CurOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          SelectionMode="Single">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding OrderId}" Width="30" />
+                        <DataGridTextColumn Header="Order Date" Binding="{Binding OrderDate}" Width="138"/>
+                        <DataGridTextColumn Header="Member" Binding="{Binding Member.Email}" Width="170"/>
+                        <DataGridTextColumn Header="Required Date" Binding="{Binding RequiredDate}" Width="138" />
+                        <DataGridTextColumn Header="Shipped Date" Binding="{Binding ShippedDate}" Width="138" />
+                        <DataGridTextColumn Header="Freight" Binding="{Binding Freight, StringFormat='#,0'}" Width="80"/>
+                        <DataGridTextColumn Header="Total" Binding="{Binding TotalMoney}" Width="80"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <Label HorizontalAlignment="Center" FontSize="18"
+                       FontWeight="SemiBold" Content="{Binding EmptyMess}"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+    <!--<StackPanel>
         <local:MenuBar/>
         <Grid Height="412">
             <Grid.RowDefinitions>
@@ -15,55 +124,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-
-            <!--<Label Content="Order ID" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"/>
-            <TextBox Name="txtOrderId" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="118,30,0,0" 
-                 TextWrapping="Wrap" VerticalAlignment="Top" Width="184" Height="26" IsReadOnly="True"
-                 Text="{Binding Path=OrderId,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
-                                Converter={StaticResource NullToEmptyStringConverter}, 
-                                    ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"
-                        Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
-
-            <Label Content="Order Date" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top"/>
-            <xctk:DateTimePicker Name="txtOrderDate"  VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="118,67,0,0" 
-            VerticalAlignment="Top" Width="184" Height="26"
-                                Format="Custom" FormatString="dd/MM/yyyy HH:mm:ss" 
-                             Value="{Binding Path=OrderDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-
-
-            <Label Content="Member" HorizontalAlignment="Left" Margin="10,104,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="txtMember" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="118,104,0,0" 
-            TextWrapping="Wrap" VerticalAlignment="Top" Width="184" Height="26"
-                 Text="{Binding Path=MemberId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
-                                Converter={StaticResource NullToEmptyStringConverter}, 
-                                    ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"
-                        Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
-
-            <Label Content="Required Date" HorizontalAlignment="Left" Margin="405,30,0,0" VerticalAlignment="Top"/>
-            <xctk:DateTimePicker Name="txtRequiredDate" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="513,30,0,0" 
-             VerticalAlignment="Top" Width="184" Height="26"
-                                Format="Custom" FormatString="dd/MM/yyyy HH:mm:ss" 
-                             Value="{Binding Path=RequiredDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-
-            <Label Content="Shipped Date" HorizontalAlignment="Left" Margin="405,67,0,0" VerticalAlignment="Top"/>
-
-            <xctk:DateTimePicker Name="txtShippedDate" VerticalContentAlignment="Center" VerticalAlignment="Top" 
-                             Width="184" Height="26" HorizontalAlignment="Left" Margin="513,67,0,0" 
-                                Format="Custom" FormatString="dd/MM/yyyy HH:mm:ss" 
-                             Value="{Binding Path=ShippedDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-
-            <Label Content="Freight" HorizontalAlignment="Left" Margin="405,104,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="txtFreight" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="513,104,0,0" 
-            TextWrapping="Wrap" VerticalAlignment="Top" Width="184" Height="26" 
-                 Text="{Binding Path=Freight,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
-                                Converter={StaticResource NullToEmptyStringConverter}, 
-                                    ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"
-                        Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
-
-            <Button Content="Add" Name="btnAdd" Command="{Binding AddOrderCommand}" HorizontalAlignment="Left" Margin="58,161,0,0" VerticalAlignment="Top" Width="118" Height="25"/>
-            <Button Content="Update" x:Name="btnNew"  Command="{Binding UpdateOrderCommand}" HorizontalAlignment="Left" Margin="215,161,0,0" VerticalAlignment="Top" Width="118" Height="25"/>
-            <Button Content="Delete" x:Name="btnDelete"  Command="{Binding DeleteOrderCommand}" HorizontalAlignment="Left" Margin="373,161,0,0" VerticalAlignment="Top" Width="118" Height="25"/>-->
-
+            
             <GroupBox Grid.Row="0" Margin="5,10,5,0">
                 <GroupBox.Header>
                     <Label Content="Search" FontSize="17" FontWeight="SemiBold"/>
@@ -85,7 +146,7 @@
                         <xctk:DateTimePicker x:Name="txtStartDate" 
                                 Width="155" Margin="10,0,0,0"
                                 Format="Custom" FormatString="dd/MM/yyyy HH:mm:ss" VerticalContentAlignment="Center"
-                                Value="{Binding StartDate, Converter={StaticResource NullToEmptyStringConverter}, Mode=TwoWay, 
+                                Value="{Binding StartDate,  Mode=TwoWay, 
                                         NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, 
                                         ValidatesOnDataErrors=True, ValidatesOnExceptions=True}"
                                         Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
@@ -93,7 +154,7 @@
                         <xctk:DateTimePicker x:Name="txtEndDate" 
                                 Width="155" Margin="10,0,0,0" 
                                 Format="Custom" FormatString="dd/MM/yyyy HH:mm:ss" VerticalContentAlignment="Center"
-                                 Value="{Binding EndDate, Converter={StaticResource NullToEmptyStringConverter}, Mode=TwoWay, 
+                                 Value="{Binding EndDate, Mode=TwoWay, 
                                         NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, 
                                         ValidatesOnDataErrors=True, ValidatesOnExceptions=True}"
                                         Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
@@ -146,5 +207,5 @@
                 </StatusBar>
             </DockPanel>
         </Grid>
-    </StackPanel>
+    </StackPanel>-->
 </Window>
